@@ -60,7 +60,7 @@ class google_divisas extends fs_controller
       $fsext->from = __CLASS__;
       $fsext->to = 'admin_divisas';
       $fsext->type = 'modal';
-      $fsext->text = 'Google';
+      $fsext->text = '<i class="fa fa-globe"></i><span class="hidden-xs">&nbsp; Google</span>';
       $fsext->save();
    }
    
