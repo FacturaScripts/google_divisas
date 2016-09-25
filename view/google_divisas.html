@@ -7,10 +7,20 @@
          <p class="help-block">
             Puedes obtener las tasas de conversión actualizadas de cada divisa
             consultando con Google. Simplemente pulsa el botón actualizar.
+            También puedes activar el cron para que se actualicen en cada ejecución.
          </p>
          <a href="{$fsc->url()}&consultar=TRUE" class="btn btn-sm btn-primary">
-            <i class="fa fa-globe"></i> &nbsp; Actualizar tasas de conversión
+            <i class="fa fa-globe"></i> &nbsp; Actualizar ahora
          </a>
+         {if="$fsc->setup_cron"}
+         <a href="{$fsc->url()}&nocron=TRUE" class="btn btn-sm btn-success">
+            <i class="fa fa-toggle-on"></i> &nbsp; Desactivar cron
+         </a>
+         {else}
+         <a href="{$fsc->url()}&cron=TRUE" class="btn btn-sm btn-default">
+            <i class="fa fa-toggle-off"></i> &nbsp; Activar cron
+         </a>
+         {/if}
          <br/>
          <br/>
          <div class="thumbnail">

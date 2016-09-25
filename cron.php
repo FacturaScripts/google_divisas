@@ -1,6 +1,6 @@
 <?php
 
-/**
+/*
  * @author Carlos García Gómez      neorazorx@gmail.com
  * @copyright 2016, Carlos García Gómez. All Rights Reserved. 
  * 
@@ -21,27 +21,16 @@
 require_model('divisa.php');
 
 /**
- * Description of google_divisas
+ * Description of cron_google_divisas
  *
  * @author carlos
  */
-class google_divisas extends fs_controller
+class cron_google_divisas
 {
-   public $setup_cron;
-   
    public function __construct()
    {
-      parent::__construct(__CLASS__, 'Google Divisas', 'admin', FALSE, FALSE);
-   }
-   
-   protected function private_core()
-   {
-      $this->share_extensions();
-      
       $fsvar = new fs_var();
-      $this->setup_cron = $fsvar->simple_get('google_divisas_cron');
-      
-      if( isset($_GET['consultar']) )
+      if( $fsvar->simple_get('google_divisas_cron') )
       {
          $divisa = new divisa();
          foreach($divisa->all() as $div)
@@ -50,35 +39,15 @@ class google_divisas extends fs_controller
             {
                $div->tasaconv_compra = $div->tasaconv = $this->convert_currency(1, 'EUR', $div->coddivisa);
                $div->save();
+               
+               echo '.';
             }
          }
-         
-         $this->new_message('Tasas de conversión actualizadas. '
-                 . '<a href="index.php?page=admin_divisas" target="_parent">Recarga la página</a>.');
       }
-      else if( isset($_GET['cron']) )
+      else
       {
-         $this->setup_cron = '1';
-         $fsvar->simple_save('google_divisas_cron', $this->setup_cron);
-         $this->new_message('Cron activado.');
+         echo 'Cron desactivado.';
       }
-      else if( isset($_GET['nocron']) )
-      {
-         $this->setup_cron = FALSE;
-         $fsvar->simple_delete('google_divisas_cron');
-         $this->new_message('Cron desactivado.');
-      }
-   }
-   
-   private function share_extensions()
-   {
-      $fsext = new fs_extension();
-      $fsext->name = 'tab_divisas';
-      $fsext->from = __CLASS__;
-      $fsext->to = 'admin_divisas';
-      $fsext->type = 'modal';
-      $fsext->text = '<i class="fa fa-globe"></i><span class="hidden-xs">&nbsp; Google</span>';
-      $fsext->save();
    }
    
    private function convert_currency($amount, $from, $to)
@@ -174,3 +143,5 @@ class google_divisas extends fs_controller
       }
    }
 }
+
+new cron_google_divisas();
