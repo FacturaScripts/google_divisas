@@ -2,7 +2,7 @@
 
 /**
  * @author Carlos García Gómez      neorazorx@gmail.com
- * @copyright 2016, Carlos García Gómez. All Rights Reserved. 
+ * @copyright 2016-2017, Carlos García Gómez. All Rights Reserved. 
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
@@ -114,6 +114,12 @@ class google_divisas extends fs_controller
          curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
          curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
          curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+         if( defined('FS_PROXY_TYPE') )
+         {
+            curl_setopt($ch, CURLOPT_PROXYTYPE, FS_PROXY_TYPE);
+            curl_setopt($ch, CURLOPT_PROXY, FS_PROXY_HOST);
+            curl_setopt($ch, CURLOPT_PROXYPORT, FS_PROXY_PORT);
+         }
          $data = curl_exec($ch);
          $info = curl_getinfo($ch);
          
@@ -143,6 +149,12 @@ class google_divisas extends fs_controller
    {
       curl_setopt($ch, CURLOPT_HEADER, true);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      if( defined('FS_PROXY_TYPE') )
+      {
+         curl_setopt($ch, CURLOPT_PROXYTYPE, FS_PROXY_TYPE);
+         curl_setopt($ch, CURLOPT_PROXY, FS_PROXY_HOST);
+         curl_setopt($ch, CURLOPT_PROXYPORT, FS_PROXY_PORT);
+      }
       $data = curl_exec($ch);
       $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
       
