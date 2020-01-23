@@ -74,13 +74,13 @@ class google_divisas extends fs_controller
 
     private function convert_currency($amount, $from, $to)
     {
-        $url = "http://free.currencyconverterapi.com/api/v5/convert?q=" . $from . "_" . $to . "&compact=ultra";
+        $url = "https://api.exchangerate-api.com/v4/latest/" . $from;
         $data = fs_file_get_contents($url);
         $json = json_decode($data, true);
 
-        $tasa = 1;
-        if (isset($json[$from . '_' . $to])) {
-            $tasa = (float) $json[$from . '_' . $to];
+        $tasa = 0;
+        if (isset($json['rates'][$to])) {
+            $tasa = (float) $json['rates'][$to];
         }
 
         return $amount * $tasa;
